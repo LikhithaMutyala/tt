@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+// Union for Bank Account
+union BankAccount {
+    int accountNumber;
+    char accountHolder[50];
+    float balance;
+};
+
+int main() {
+    union BankAccount account;
+
+    printf("Enter Account Number: ");
+    scanf("%d", &account.accountNumber);
+    printf("Account Number stored: %d\n", account.accountNumber);
+
+    // Warning: storing a new value will overwrite previous in union
+    printf("Enter Account Holder Name: ");
+    scanf(" %[^\n]", account.accountHolder);
+    printf("Account Holder stored: %s\n", account.accountHolder);
+
+    printf("Enter Balance: ");
+    scanf("%f", &account.balance);
+    printf("Balance stored: %.2f\n", account.balance);
+
+    printf("\nNote: Union stores only the last value assigned.\n");
+
+    return 0;
+}
