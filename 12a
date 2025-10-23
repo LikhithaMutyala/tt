@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+// Declaration of external variable
+extern int count;
+
+// Declaration of external function
+void increment();
+
+int main() {
+    count = 5; // initialize
+    printf("Initial count: %d\n", count);
+
+    increment();
+    printf("Count after increment: %d\n", count);
+
+    increment();
+    printf("Count after second increment: %d\n", count);
+
+    return 0;
+}
