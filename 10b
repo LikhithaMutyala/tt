@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to split linked list into two halves
+void splitList(struct Node* source, struct Node** front, struct Node** back) {
+    struct Node* slow = source;
+    struct Node* fast = source->next;
+
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+
+    *front = source;
+    *back = slow->next;
+    slow->next = NULL;
+}
+
+// Function to merge two sorted lists
+struct Node* sortedMerge(struct Node* a, struct Node* b) {
+    struct Node* result = NULL;
+    if (a == NULL) return b;
+    if (b == NULL) return a;
+
+    if (a->data <= b->data) {
+        result = a;
+        result->next = sortedMerge(a->next, b);
+    } else {
+        result = b;
+        result->next = sortedMerge(a, b->next);
+    }
+    return result;
+}
+
+// Merge sort function
+void mergeSort(struct Node** headRef) {
+    struct Node* head = *headRef;
+    if (head == NULL || head->next == NULL)
+        return;
+
+    struct Node* a;
+    struct Node* b;
+
+    splitList(head, &a, &b);
+
+    mergeSort(&a);
+    mergeSort(&b);
+
+    *headRef = sortedMerge(a, b);
+}
+
+// Function to print linked list
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int n, data;
+    struct Node* head = NULL;
+    struct Node* tail = NULL;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &data);
+        struct Node* newNode = createNode(data);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    mergeSort(&head);
+
+    printf("Sorted Linked List: ");
+    printList(head);
+
+    return 0;
+}
